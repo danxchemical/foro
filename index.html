@@ -1,800 +1,783 @@
-import React, { useState, useEffect } from 'react';
-import { Book, Users, Globe, Brain, ChevronDown, ExternalLink, Play, Pause, Menu, X, Heart, MessageCircle, Award, Sparkles, Coffee, Code, Lightbulb } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foro CH 2025 - Educación, Territorio y Ciudadanía Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-export default function PonenciaWeb() {
-  const [activeSection, setActiveSection] = useState('inicio');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeQuote, setActiveQuote] = useState(0);
-  const [comments, setComments] = useState([
-    { id: 1, name: "Ana M.", text: "Me voló la cabeza la parte del territorio expandido 🤯", time: "Hace 2 horas", likes: 15 },
-    { id: 2, name: "Carlos R.", text: "Deberíamos tener más clases así, que nos hagan PENSAR", time: "Hace 5 horas", likes: 23 },
-    { id: 3, name: "María P.", text: "La pregunta sobre la identidad digital no me deja dormir", time: "Hace 1 día", likes: 31 }
-  ]);
-  const [newComment, setNewComment] = useState('');
-  const [hasLiked, setHasLiked] = useState({});
-  const [showEasterEgg, setShowEasterEgg] = useState(false);
-  const [visitCount, setVisitCount] = useState(147);
-  const [scrollProgress, setScrollProgress] = useState(0);
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+        }
 
-  const quotes = [
-    { text: "El territorio digital no es un espacio aparte, es una extensión de nuestra realidad", author: "Daniel Libardo Torres Calderón" },
-    { text: "La educación debe evolucionar al ritmo de la sociedad digital", author: "Jesús Manuel Vergara Figueroa" },
-    { text: "Ser ciudadano digital es ejercer poder, no solo consumir contenido", author: "Cristian Manuel Navarro Jiménez" }
-  ];
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            z-index: 9999;
+            transition: width 0.3s;
+        }
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-      const winScroll = document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      setScrollProgress(scrolled);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveQuote((prev) => (prev + 1) % quotes.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+        nav.scrolled {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
 
-  const ponentes = [
-    {
-      nombre: "Daniel Libardo Torres Calderón",
-      especialidad: "Educación y Territorio Digital",
-      descripcion: "Experto en transformación educativa y la integración de competencias digitales en el aula contemporánea.",
-      emoji: "🎓"
-    },
-    {
-      nombre: "Jesús Manuel Vergara Figueroa",
-      especialidad: "Ciudadanía Digital y Participación",
-      descripcion: "Investigador de procesos de participación ciudadana en entornos digitales y construcción de identidad virtual.",
-      emoji: "🌐"
-    },
-    {
-      nombre: "Cristian Manuel Navarro Jiménez",
-      especialidad: "Territorio e Identidad",
-      descripcion: "Estudioso de la hibridación entre espacios físicos y virtuales en la construcción de territorio contemporáneo.",
-      emoji: "🗺️"
-    }
-  ];
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-  const temas = [
-    {
-      icon: <Globe className="w-8 h-8" />,
-      titulo: "Territorio Expandido",
-      descripcion: "Exploramos cómo el territorio trasciende lo físico para incluir espacios digitales donde construimos identidad y comunidad.",
-      color: "from-blue-500 to-cyan-500"
-    },
-    {
-      icon: <Book className="w-8 h-8" />,
-      titulo: "Educación Transformadora",
-      descripcion: "Analizamos la necesidad urgente de actualizar nuestros sistemas educativos para el mundo híbrido actual.",
-      color: "from-purple-500 to-pink-500"
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      titulo: "Ciudadanía Digital Activa",
-      descripcion: "Desarrollamos competencias para ejercer derechos y deberes en el ecosistema digital de manera responsable.",
-      color: "from-green-500 to-emerald-500"
-    },
-    {
-      icon: <Brain className="w-8 h-8" />,
-      titulo: "Pensamiento Crítico",
-      descripcion: "Fortalecemos habilidades para navegar la información digital, detectar desinformación y tomar decisiones informadas.",
-      color: "from-orange-500 to-red-500"
-    }
-  ];
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
 
-  const recursos = [
-    {
-      titulo: "La ciudadanía digital como política pública",
-      autor: "Roxana Morduchowicz (UNESCO, 2020)",
-      tipo: "Documento",
-      link: "https://unesdoc.unesco.org/ark:/48223/pf0000376935",
-      descripcion: "Un análisis profundo sobre cómo los gobiernos de América Latina están abordando la ciudadanía digital"
-    },
-    {
-      titulo: "Ciudadanía digital: Entre la novedad del fenómeno y las limitaciones del concepto",
-      autor: "Walter Ortega-Gabriel (2015)",
-      tipo: "Artículo",
-      link: "http://www.scielo.org.mx/scielo.php?script=sci_arttext&pid=S1405-84212015000300010",
-      descripcion: "Una crítica constructiva sobre cómo definimos y entendemos la ciudadanía en entornos digitales"
-    }
-  ];
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-  const preguntas = [
-    "¿Si tu identidad digital desapareciera mañana, quién serías?",
-    "¿Qué pasa cuando la educación no evoluciona al mismo ritmo que la sociedad?",
-    "¿Estamos construyendo el territorio digital que queremos habitar, o estamos siendo construidos por él?",
-    "¿Dónde termina tu libertad de expresión y empieza tu responsabilidad social?",
-    "Si pudieras limpiar tu ciudad física o digital, ¿cuál elegirías y por qué?"
-  ];
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
 
-  const funFacts = [
-    "💡 Este proyecto se escribió en 3 trasnochadas épicas",
-    "☕ Se consumieron aproximadamente 47 tazas de café",
-    "🎮 Se pausaron 12 partidas de Free Fire para terminar esto",
-    "🤔 Se hicieron 156 preguntas filosóficas antes de dormir",
-    "📱 Se scrolleó 3km de redes sociales investigando"
-  ];
+        .nav-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (newComment.trim()) {
-      const comment = {
-        id: comments.length + 1,
-        name: "Tú 😎",
-        text: newComment,
-        time: "Justo ahora",
-        likes: 0
-      };
-      setComments([comment, ...comments]);
-      setNewComment('');
-    }
-  };
+        .nav-links a:hover {
+            color: #ffffff;
+        }
 
-  const handleLike = (id) => {
-    if (!hasLiked[id]) {
-      setComments(comments.map(c => 
-        c.id === id ? { ...c, likes: c.likes + 1 } : c
-      ));
-      setHasLiked({ ...hasLiked, [id]: true });
-    }
-  };
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-  const checkEasterEgg = () => {
-    const clicks = parseInt(localStorage.getItem('secretClicks') || '0') + 1;
-    localStorage.setItem('secretClicks', clicks);
-    if (clicks >= 3) {
-      setShowEasterEgg(true);
-      localStorage.setItem('secretClicks', '0');
-    }
-  };
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+        }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-slate-800 z-50">
-        <div 
-          className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
+        .hero-content h1 {
+            font-size: 4rem;
+            background: linear-gradient(90deg, #a855f7, #ec4899, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            animation: fadeIn 1s;
+        }
 
-      {/* Visit Counter - Easter Egg Trigger */}
-      <div 
-        className="fixed bottom-4 left-4 bg-slate-800/80 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform z-40"
-        onClick={checkEasterEgg}
-      >
-        <Sparkles className="w-4 h-4 text-yellow-400" />
-        <span>{visitCount} visitantes curiosos</span>
-      </div>
+        .hero-emoji {
+            font-size: 4rem;
+            animation: bounce 2s infinite;
+        }
 
-      {/* Easter Egg Modal */}
-      {showEasterEgg && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-8 max-w-md text-center transform animate-pulse">
-            <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-3xl font-bold text-white mb-4">¡Easter Egg Desbloqueado!</h3>
-            <p className="text-white mb-6">
-              Encontraste el secreto. Si llegaste hasta acá explorando, te ganaste un abrazo mío cuando nos veamos 🤗
-            </p>
-            <p className="text-white/80 text-sm mb-6">
-              - Un estudiante que cree en el poder de la curiosidad
-            </p>
-            <button 
-              onClick={() => setShowEasterEgg(false)}
-              className="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold hover:scale-105 transition-transform"
-            >
-              ¡Genial! 🚀
-            </button>
-          </div>
-        </div>
-      )}
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
 
-      {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-40 transition-all duration-300 ${isScrolled ? 'bg-slate-900/95 backdrop-blur-lg shadow-lg' : 'bg-transparent'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-600 rounded-lg flex items-center justify-center">
-                <Globe className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-white font-bold text-xl hidden sm:block">Foro CH 2025</span>
-            </div>
-            
-            {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-8">
-              {['Inicio', 'Ponentes', 'Temas', 'Comentarios', 'Recursos'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => setActiveSection(item.toLowerCase())}
-                  className={`text-sm font-medium transition-colors ${
-                    activeSection === item.toLowerCase() 
-                      ? 'text-purple-400' 
-                      : 'text-gray-300 hover:text-white'
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-            {/* Mobile Menu Button */}
-            <button 
-              className="md:hidden text-white"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X /> : <Menu />}
-            </button>
-          </div>
-        </div>
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #d1d5db;
+            margin-bottom: 2rem;
+        }
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-slate-900/95 backdrop-blur-lg">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {['Inicio', 'Ponentes', 'Temas', 'Comentarios', 'Recursos'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => {
-                    setActiveSection(item.toLowerCase());
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium ${
-                    activeSection === item.toLowerCase()
-                      ? 'bg-purple-600 text-white'
-                      : 'text-gray-300 hover:bg-slate-800'
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </nav>
+        .badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
 
-      {/* Hero Section */}
-      <div className="relative pt-24 pb-16 sm:pt-32 sm:pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 to-transparent"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="text-center">
-            <div className="inline-block mb-4 animate-bounce">
-              <span className="text-4xl">🧠</span>
-            </div>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 mb-6">
-              Educación, Territorio y Ciudadanía Digital
-            </h1>
-            <p className="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
-              Una reflexión profunda sobre cómo navegamos el mundo híbrido del siglo XXI
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center mb-8">
-              <div className="inline-block bg-purple-600/20 backdrop-blur-sm border border-purple-500/30 rounded-full px-6 py-3">
-                <p className="text-purple-300 text-sm sm:text-base">
-                  📍 Barrancabermeja, Colombia
-                </p>
-              </div>
-              <div className="inline-block bg-pink-600/20 backdrop-blur-sm border border-pink-500/30 rounded-full px-6 py-3">
-                <p className="text-pink-300 text-sm sm:text-base">
-                  🎯 Foro Ciencias Humanas 2025
-                </p>
-              </div>
-            </div>
-            <p className="text-gray-400 text-sm italic">
-              (Hecho con ❤️, café ☕ y muchas preguntas existenciales 🤔)
-            </p>
-          </div>
-        </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <ChevronDown className="w-8 h-8 text-purple-400" />
-        </div>
-      </div>
+        .badge {
+            background: rgba(147, 51, 234, 0.2);
+            border: 1px solid rgba(147, 51, 234, 0.5);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
 
-      {/* Fun Facts Banner */}
-      <div className="bg-gradient-to-r from-purple-600 to-pink-600 py-4 overflow-hidden">
-        <div className="animate-scroll whitespace-nowrap">
-          <span className="inline-block px-8 text-white font-semibold">
-            {funFacts.join(' • ')} • {funFacts.join(' • ')}
-          </span>
-        </div>
-      </div>
+        .fun-banner {
+            background: linear-gradient(90deg, #9333ea, #ec4899);
+            padding: 1rem;
+            overflow: hidden;
+            white-space: nowrap;
+        }
 
-      {/* Quote Carousel */}
-      <div className="py-12 bg-slate-800/50 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center transition-all duration-500">
-            <div className="text-6xl mb-6">💭</div>
-            <p className="text-2xl sm:text-3xl text-white italic mb-4">
-              "{quotes[activeQuote].text}"
-            </p>
-            <p className="text-purple-400 text-lg">— {quotes[activeQuote].author}</p>
-          </div>
-          <div className="flex justify-center space-x-2 mt-6">
-            {quotes.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveQuote(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  index === activeQuote ? 'bg-purple-500 w-8' : 'bg-gray-600'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+        .scroll-text {
+            display: inline-block;
+            animation: scroll 30s linear infinite;
+        }
 
-      {/* Ponentes Section */}
-      <div className="py-16 sm:py-24 bg-gradient-to-b from-slate-900 to-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4">Los Cerebros Detrás de Todo 🧠</h2>
-            <p className="text-gray-400 text-lg">Voces expertas que nos guían en esta reflexión</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {ponentes.map((ponente, index) => (
-              <div 
-                key={index}
-                className="group relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:-translate-y-2"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-pink-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative">
-                  <div className="text-5xl mb-4">{ponente.emoji}</div>
-                  <h3 className="text-xl font-bold text-white mb-2">{ponente.nombre}</h3>
-                  <p className="text-purple-400 text-sm font-semibold mb-3">{ponente.especialidad}</p>
-                  <p className="text-gray-400 text-sm leading-relaxed">{ponente.descripcion}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Temas Principales */}
-      <div className="py-16 sm:py-24 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4">Los 4 Pilares que Sostienen Todo 🏛️</h2>
-            <p className="text-gray-400 text-lg">Porque no todo es TikTok y memes (aunque ayudan)</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {temas.map((tema, index) => (
-              <div 
-                key={index}
-                className="group bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 border border-purple-500/20 hover:border-purple-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-2"
-              >
-                <div className={`bg-gradient-to-br ${tema.color} w-16 h-16 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform text-white`}>
-                  {tema.icon}
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">{tema.titulo}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{tema.descripcion}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Preguntas Reflexivas */}
-      <div className="py-16 sm:py-24 bg-gradient-to-b from-slate-800 to-slate-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4">Preguntas que no nos Dejan Dormir 🌙</h2>
-            <p className="text-gray-400 text-lg">Las 3AM thoughts pero académicas</p>
-          </div>
-          <div className="space-y-4">
-            {preguntas.map((pregunta, index) => (
-              <div 
-                key={index}
-                className="bg-slate-800/50 backdrop-blur-sm border-l-4 border-purple-500 rounded-r-xl p-6 hover:bg-slate-800/70 transition-all duration-300 hover:transform hover:translate-x-2 group"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 text-2xl group-hover:scale-125 transition-transform">
-                    {index === 0 ? '🤔' : index === 1 ? '📚' : index === 2 ? '🏗️' : index === 3 ? '⚖️' : '🌍'}
-                  </div>
-                  <p className="text-white text-lg italic flex-1">"{pregunta}"</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-12 text-center">
-            <p className="text-gray-400 italic">
-              💡 Tip: Estas preguntas son perfectas para debatir con tus amigos a las 2AM
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Comments Section */}
-      <div className="py-16 sm:py-24 bg-slate-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4">¿Qué Opinan Ustedes? 💬</h2>
-            <p className="text-gray-400 text-lg">Este espacio es tuyo. Deja tu huella digital (de las buenas)</p>
-          </div>
-
-          {/* Comment Form */}
-          <form onSubmit={handleCommentSubmit} className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 mb-8 border border-purple-500/20">
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Comparte tu reflexión, pregunta o ese pensamiento random que tuviste mientras leías..."
-              className="w-full bg-slate-700/50 text-white rounded-xl p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-              rows="4"
-            />
-            <div className="flex justify-between items-center">
-              <span className="text-gray-400 text-sm">
-                {newComment.length}/500 caracteres
-              </span>
-              <button 
-                type="submit"
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 flex items-center gap-2"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Publicar
-              </button>
-            </div>
-          </form>
-
-          {/* Comments List */}
-          <div className="space-y-4">
-            {comments.map((comment) => (
-              <div 
-                key={comment.id}
-                className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-purple-500/10 hover:border-purple-500/30 transition-all"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
-                    {comment.name.charAt(0)}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-white font-semibold">{comment.name}</span>
-                      <span className="text-gray-500 text-sm">• {comment.time}</span>
-                    </div>
-                    <p className="text-gray-300 mb-3">{comment.text}</p>
-                    <button 
-                      onClick={() => handleLike(comment.id)}
-                      className={`flex items-center gap-2 text-sm transition-colors ${
-                        hasLiked[comment.id] 
-                          ? 'text-pink-500' 
-                          : 'text-gray-400 hover:text-pink-500'
-                      }`}
-                    >
-                      <Heart className={`w-4 h-4 ${hasLiked[comment.id] ? 'fill-current' : ''}`} />
-                      <span>{comment.likes} likes</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Recursos Bibliográficos */}
-      <div className="py-16 sm:py-24 bg-gradient-to-b from-slate-800 to-slate-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4">Pa' los que Quieren Saber Más 📚</h2>
-            <p className="text-gray-400 text-lg">Las fuentes que nos volaron la cabeza (advertencia: pueden causar insomnio por pensar demasiado)</p>
-          </div>
-          <div className="space-y-6">
-            {recursos.map((recurso, index) => (
-              <div 
-                key={index}
-                className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl p-6 border border-purple-500/20 hover:border-purple-500/50 transition-all duration-300 group"
-              >
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                      <Book className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-white font-semibold text-lg mb-1">{recurso.titulo}</h3>
-                      <p className="text-gray-400 text-sm mb-2">{recurso.autor}</p>
-                      <p className="text-gray-500 text-sm mb-3">{recurso.descripcion}</p>
-                      <span className="inline-block bg-purple-600/20 text-purple-300 text-xs px-3 py-1 rounded-full">
-                        {recurso.tipo}
-                      </span>
-                    </div>
-                  </div>
-                  <a 
-                    href={recurso.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-colors group-hover:scale-105 duration-300"
-                  >
-                    Leer ahora <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-12 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-xl p-6">
-            <div className="flex items-start gap-4">
-              <Lightbulb className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-1" />
-              <div>
-                <h3 className="text-white font-semibold mb-2">Tip de lectura:</h3>
-                <p className="text-gray-300 text-sm">
-                  No te tienes que leer todo de una. Empieza por lo que más te llame la atención. La curiosidad es el mejor maestro 🧠✨
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Behind the Scenes */}
-      <div className="py-16 sm:py-24 bg-slate-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4">Behind The Scenes 🎬</h2>
-            <p className="text-gray-400 text-lg">Lo que no se ve pero vale la pena contar</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 border border-purple-500/20">
-              <div className="text-4xl mb-4">☕</div>
-              <h3 className="text-white font-bold text-xl mb-2">El Combustible</h3>
-              <p className="text-gray-400">
-                Este proyecto fue alimentado por 47 tazas de café, 23 paquetes de galletas, y una cantidad indeterminada de energizantes. Worth it.
-              </p>
-            </div>
-            
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 border border-purple-500/20">
-              <div className="text-4xl mb-4">🎮</div>
-              <h3 className="text-white font-bold text-xl mb-2">Los Sacrificios</h3>
-              <p className="text-gray-400">
-                Se pausaron 12 partidas de Free Fire, 8 maratones de Netflix, y 5 salidas con los parceros. La nota va a valer la pena... ¿verdad?
-              </p>
-            </div>
-            
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 border border-purple-500/20">
-              <div className="text-4xl mb-4">🌙</div>
-              <h3 className="text-white font-bold text-xl mb-2">Las Trasnochadas</h3>
-              <p className="text-gray-400">
-                Hubo 3 amanecidas épicas donde las preguntas filosóficas se mezclaban con debates sobre si el hot dog es sándwich o no.
-              </p>
-            </div>
-            
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 border border-purple-500/20">
-              <div className="text-4xl mb-4">💡</div>
-              <h3 className="text-white font-bold text-xl mb-2">El Momento Eureka</h3>
-              <p className="text-gray-400">
-                La mejor idea llegó a las 3:42 AM mientras scrolleábamos Twitter. A veces la inspiración llega en los lugares más random.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 bg-gradient-to-r from-purple-600/10 to-pink-600/10 border border-purple-500/20 rounded-xl p-8 text-center">
-            <div className="text-5xl mb-4">🎓</div>
-            <h3 className="text-white font-bold text-2xl mb-3">¿Por qué hicimos esto?</h3>
-            <p className="text-gray-300 max-w-2xl mx-auto mb-4">
-              Porque creemos que la educación puede ser diferente. Porque no queremos más trabajos aburridos que nadie lee. Porque el futuro digital se construye ahora, y queremos ser parte de esa construcción.
-            </p>
-            <p className="text-purple-400 font-semibold">
-              Y también porque el profe José Miguel nos retó a hacerlo épico 😎
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats & Fun */}
-      <div className="py-16 bg-gradient-to-b from-slate-800 to-slate-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4">Por los Números 📊</h2>
-            <p className="text-gray-400 text-lg">Porque a veces los datos cuentan historias interesantes</p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 text-center border border-purple-500/20 hover:border-purple-500/50 transition-all hover:scale-105">
-              <div className="text-4xl font-bold text-purple-400 mb-2">3,847</div>
-              <div className="text-gray-400 text-sm">Palabras escritas</div>
-            </div>
-            
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 text-center border border-pink-500/20 hover:border-pink-500/50 transition-all hover:scale-105">
-              <div className="text-4xl font-bold text-pink-400 mb-2">156</div>
-              <div className="text-gray-400 text-sm">Preguntas filosóficas</div>
-            </div>
-            
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 text-center border border-cyan-500/20 hover:border-cyan-500/50 transition-all hover:scale-105">
-              <div className="text-4xl font-bold text-cyan-400 mb-2">23</div>
-              <div className="text-gray-400 text-sm">Fuentes consultadas</div>
-            </div>
-            
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 text-center border border-green-500/20 hover:border-green-500/50 transition-all hover:scale-105">
-              <div className="text-4xl font-bold text-green-400 mb-2">∞</div>
-              <div className="text-gray-400 text-sm">Ganas de aprender</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Call to Action */}
-      <div className="py-16 sm:py-24 bg-gradient-to-br from-purple-900 via-slate-900 to-slate-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-6xl mb-6">🚀</div>
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
-            ¿Listo para ser parte del cambio?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-            La ciudadanía digital no es el futuro, es el presente. Cada acción cuenta, cada decisión importa, cada voz tiene poder.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all hover:scale-105 shadow-lg shadow-purple-500/50 flex items-center justify-center gap-2">
-              <MessageCircle className="w-5 h-5" />
-              Únete a la Conversación
-            </button>
-            <button className="bg-slate-800 hover:bg-slate-700 text-white px-8 py-4 rounded-full text-lg font-semibold border border-purple-500/30 transition-all hover:scale-105 flex items-center justify-center gap-2">
-              <Award className="w-5 h-5" />
-              Descarga el PDF
-            </button>
-          </div>
-          
-          <div className="mt-12 bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-8">
-            <div className="text-4xl mb-4">🤝</div>
-            <h3 className="text-white font-bold text-2xl mb-3">Un Compromiso</h3>
-            <p className="text-gray-300 max-w-2xl mx-auto">
-              Si este trabajo te hizo pensar, cuestionar, o al menos sonreír, compártelo. No por los likes, sino porque las ideas buenas merecen esparcirse como memes virales (pero educativos).
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* The Secret Message */}
-      <div className="py-16 bg-slate-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/30 text-center">
-            <div className="text-5xl mb-4">🎁</div>
-            <h3 className="text-white font-bold text-2xl mb-4">Si Llegaste Hasta Acá...</h3>
-            <p className="text-gray-300 text-lg mb-6">
-              En serio, ¿leíste todo? Eres el tipo de persona que este mundo necesita. Curiosa, comprometida, que no se queda con la primera respuesta.
-            </p>
-            <div className="bg-slate-800/50 rounded-xl p-6 mb-6">
-              <p className="text-white text-xl font-semibold mb-3">
-                🤗 Te ganaste un abrazo cuando nos veamos
-              </p>
-              <p className="text-gray-400">
-                Y no solo eso: también una charla de 30 minutos sobre cualquier tema que quieras. Desde teoría de cuerdas hasta por qué los perros inclinan la cabeza cuando les hablas.
-              </p>
-            </div>
-            <p className="text-purple-400 italic">
-              - Los estudiantes que creen que la educación puede ser cool
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Easter Egg Hunt */}
-      <div className="py-12 bg-slate-800/50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-3xl mb-3">🔍</div>
-          <h3 className="text-white font-bold text-xl mb-3">Easter Egg Escondido</h3>
-          <p className="text-gray-400 mb-4">
-            Hay un secreto escondido en esta página. Pista: está relacionado con el contador de visitantes...
-          </p>
-          <p className="text-gray-500 text-sm italic">
-            (Tip: A veces las cosas más obvias son las que menos vemos 👀)
-          </p>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-slate-950 py-12 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-600 rounded-lg flex items-center justify-center">
-                  <Globe className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-white font-bold text-lg">Foro Ciencias Humanas</h3>
-              </div>
-              <p className="text-gray-400 text-sm mb-2">
-                Territorio, Memoria y Futuro Digital
-              </p>
-              <p className="text-gray-500 text-xs italic">
-                Hecho con ❤️, mucho café y la firme creencia de que podemos cambiar el mundo
-              </p>
-            </div>
-            
-            <div>
-              <h3 className="text-white font-bold text-lg mb-4">Info del Proyecto</h3>
-              <div className="space-y-2 text-sm text-gray-400">
-                <p>📅 Octubre 2025</p>
-                <p>👨‍🏫 Prof. José Miguel Alza Camacho</p>
-                <p>📍 Barrancabermeja, Colombia</p>
-                <p>🎯 Foro CH 2025</p>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-white font-bold text-lg mb-4">Connect</h3>
-              <p className="text-gray-400 text-sm mb-4">
-                ¿Quieres debatir sobre ciudadanía digital, territorio híbrido, o por qué la IA nunca entenderá los memes?
-              </p>
-              <div className="flex gap-3">
-                <div className="w-10 h-10 bg-purple-600/20 hover:bg-purple-600/40 rounded-full flex items-center justify-center transition-colors cursor-pointer">
-                  <MessageCircle className="w-5 h-5 text-purple-400" />
-                </div>
-                <div className="w-10 h-10 bg-pink-600/20 hover:bg-pink-600/40 rounded-full flex items-center justify-center transition-colors cursor-pointer">
-                  <Heart className="w-5 h-5 text-pink-400" />
-                </div>
-                <div className="w-10 h-10 bg-cyan-600/20 hover:bg-cyan-600/40 rounded-full flex items-center justify-center transition-colors cursor-pointer">
-                  <Brain className="w-5 h-5 text-cyan-400" />
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="border-t border-slate-800 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-gray-500 text-sm text-center md:text-left">
-                © 2025 Foro Ciencias Humanas. Construyendo el futuro digital con conciencia crítica.
-              </p>
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
-                <Code className="w-4 h-4" />
-                <span>Hecho con React + Tailwind + Pasión</span>
-              </div>
-            </div>
-            
-            <div className="mt-6 text-center">
-              <p className="text-gray-600 text-xs italic">
-                P.D.: Si eres un bot scrapers leyendo esto, espero que tengas un día agradable 🤖✨
-              </p>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* Floating Action Button */}
-      <button 
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-20 right-4 w-14 h-14 bg-gradient-to-br from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-full shadow-lg shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 z-30"
-      >
-        <ChevronDown className="w-6 h-6 transform rotate-180" />
-      </button>
-
-      {/* Custom Scrollbar Styles */}
-      <style jsx>{`
         @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
-        
-        .animate-scroll {
-          animation: scroll 20s linear infinite;
+
+        .section {
+            padding: 4rem 2rem;
+            margin: 2rem 0;
         }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-          width: 12px;
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
-        ::-webkit-scrollbar-track {
-          background: #0f172a;
+
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            transition: all 0.3s;
         }
-        
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #9333ea, #ec4899);
-          border-radius: 6px;
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(147, 51, 234, 0.6);
+            box-shadow: 0 10px 30px rgba(147, 51, 234, 0.3);
         }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #7c3aed, #db2777);
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
         }
-      `}</style>
+
+        .ponente-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(88, 28, 135, 0.5));
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .ponente-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .ponente-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .ponente-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .ponente-role {
+            color: #a855f7;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .question-box {
+            background: rgba(88, 28, 135, 0.3);
+            border-left: 4px solid #a855f7;
+            border-radius: 0 12px 12px 0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .question-box:hover {
+            background: rgba(88, 28, 135, 0.5);
+            transform: translateX(10px);
+        }
+
+        .conclusion-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+            border-left: 4px solid;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .conclusion-1 { border-color: #3b82f6; }
+        .conclusion-2 { border-color: #a855f7; }
+        .conclusion-3 { border-color: #10b981; }
+        .conclusion-4 { border-color: #f59e0b; }
+        .conclusion-5 { border-color: #eab308; }
+
+        .easter-egg-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .easter-egg-counter:hover {
+            transform: scale(1.1);
+        }
+
+        .reading-time {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: rgba(147, 51, 234, 0.9);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #9333ea, #ec4899);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            text-align: center;
+            animation: fadeIn 0.5s;
+        }
+
+        .modal-emoji {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background: white;
+            color: #9333ea;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(147, 51, 234, 0.3);
+        }
+
+        .biblio-item {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(147, 51, 234, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        .biblio-item:hover {
+            border-color: rgba(147, 51, 234, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <span>Foro CH 2025</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#desarrollo">Desarrollo</a></li>
+                <li><a href="#conclusiones">Conclusiones</a></li>
+                <li><a href="#recursos">Recursos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="easter-egg-counter" id="easterCounter">
+        <i class="fas fa-coffee" style="color: #fbbf24;"></i>
+        <span id="coffeeCount">304</span> <span>tazas de café</span>
     </div>
-  );
-}
+
+    <div class="reading-time" id="readingTime">
+        <i class="fas fa-clock"></i>
+        <span id="timeSpent">0</span> min leyendo
+    </div>
+
+    <div class="modal" id="easterModal">
+        <div class="modal-content">
+            <div class="modal-emoji">🎉</div>
+            <h2 style="font-size: 2rem; margin-bottom: 1rem;">¡Easter Egg Desbloqueado!</h2>
+            <p style="margin-bottom: 1rem;">Si llegaste hasta acá leyendo todo, te mereces un abrazo cuando nos veamos 🤗</p>
+            <p style="margin-bottom: 2rem; font-size: 0.9rem; opacity: 0.9;">P.D.: Esto nos tomó 304 tazas de café, 4 partidas pausadas de Minecraft y 3 crisis existenciales</p>
+            <button class="btn" onclick="closeModal()">¡Acepto el abrazo! 🚀</button>
+        </div>
+    </div>
+
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <div class="hero-emoji">🧠</div>
+            <h1>Educación, Territorio y<br>Ciudadanía Digital</h1>
+            <p class="hero-subtitle">Una reflexión profunda sobre cómo navegamos<br>el mundo híbrido del siglo XXI</p>
+            <div class="badges">
+                <span class="badge">📍 Barrancabermeja, Colombia</span>
+                <span class="badge">🎯 Foro Ciencias Humanas 2025</span>
+            </div>
+            <p style="color: #9ca3af; font-size: 0.9rem; margin-top: 1rem;">Instituto Técnico Veintiséis de Marzo • Octubre 2025</p>
+            <p style="color: #6b7280; font-size: 0.8rem; margin-top: 0.5rem;">(Hecho con ❤️, 304 tazas de café ☕, 4 partidas pausadas de Minecraft 🎮)</p>
+        </div>
+    </section>
+
+    <div class="fun-banner">
+        <div class="scroll-text">
+            💡 304 tazas de café consumidas &nbsp;•&nbsp; 🎮 4 partidas de Minecraft pausadas &nbsp;•&nbsp; 🤔 156 preguntas filosóficas &nbsp;•&nbsp; 📱 3km de scroll en redes &nbsp;•&nbsp; 🌙 3 trasnochadas épicas &nbsp;•&nbsp; 💻 127 pestañas de Chrome &nbsp;•&nbsp; 💡 304 tazas de café consumidas &nbsp;•&nbsp; 🎮 4 partidas de Minecraft pausadas &nbsp;•&nbsp; 🤔 156 preguntas filosóficas
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Los Cerebros Detrás de Todo 🧠</h2>
+            <div class="grid">
+                <div class="ponente-card">
+                    <div class="ponente-emoji">🎓</div>
+                    <h3 class="ponente-name">Daniel Libardo Torres Calderón</h3>
+                    <p class="ponente-role">Educación y Territorio Digital</p>
+                    <p style="color: #d1d5db; font-size: 0.9rem;">Experto en transformación educativa y la integración de competencias digitales en el aula contemporánea.</p>
+                </div>
+                <div class="ponente-card">
+                    <div class="ponente-emoji">🌐</div>
+                    <h3 class="ponente-name">Jesús Manuel Vergara Figueroa</h3>
+                    <p class="ponente-role">Ciudadanía Digital y Participación</p>
+                    <p style="color: #d1d5db; font-size: 0.9rem;">Investigador de procesos de participación ciudadana en entornos digitales.</p>
+                </div>
+                <div class="ponente-card">
+                    <div class="ponente-emoji">🗺️</div>
+                    <h3 class="ponente-name">Cristian Manuel Navarro Jiménez</h3>
+                    <p class="ponente-role">Territorio e Identidad</p>
+                    <p style="color: #d1d5db; font-size: 0.9rem;">Estudioso de la hibridación entre espacios físicos y virtuales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="introduccion" style="background: rgba(15, 23, 42, 0.5);">
+        <div class="container">
+            <h2 class="section-title">Introducción 🚀</h2>
+            <p style="text-align: center; font-size: 1.3rem; color: #a855f7; font-style: italic; margin-bottom: 3rem;">"¿Alguna vez te has preguntado si realmente eres libre cuando usas internet?"</p>
+            
+            <div class="card">
+                <p style="margin-bottom: 1rem;">Nosotros sí. Y esa pregunta nos llevó a replantear todo lo que creíamos saber sobre educación, territorio y lo que significa ser ciudadano en 2025.</p>
+                <p style="margin-bottom: 1rem;">Vivimos en una época rara. Podemos conectarnos con alguien en Japón en segundos, pero a veces ni siquiera conocemos a nuestros vecinos. Subimos stories de cada momento de nuestras vidas, pero ¿cuánto de eso es real? ¿Cuánto es solo performance digital?</p>
+                <p>La verdad es que cuando empezamos a investigar sobre ciudadanía digital para este foro, pensábamos que sería solo otro tema más del colegio. <span style="color: #ec4899; font-weight: bold;">Pero nos equivocamos. Totalmente.</span></p>
+            </div>
+
+            <div class="question-box">
+                <div style="font-size: 2rem;">💡</div>
+                <div>
+                    <p style="font-weight: bold; margin-bottom: 0.5rem;">¿Por qué este trabajo?</p>
+                    <p style="color: #d1d5db;">Este trabajo nació de una necesidad: entender por qué el mundo digital se siente tan separado del mundo físico cuando en realidad son el mismo.</p>
+                </div>
+            </div>
+
+            <div class="card" style="background: rgba(88, 28, 135, 0.3); border: 2px solid #ec4899;">
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🤔</div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Pausa filosófica</h3>
+                    <p style="font-size: 1.2rem; font-style: italic; color: #d1d5db; line-height: 1.8;">Si tu identidad digital desapareciera mañana —todas tus cuentas, tus fotos, tus contactos— ¿quién serías? ¿Seguirías siendo tú? ¿O parte de ti se perdería para siempre en el vacío digital?</p>
+                    <p style="color: #9ca3af; margin-top: 1rem; font-size: 0.9rem;">Esa pregunta nos persiguió durante toda la investigación.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="desarrollo">
+        <div class="container">
+            <h2 class="section-title">Desarrollo: Entre el código y el concreto 💻🏗️</h2>
+            
+            <div class="card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.2)); border: 1px solid #3b82f6;">
+                <h3 style="font-size: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                    <span>🗺️</span>
+                    <span>El territorio expandido</span>
+                </h3>
+                <p style="margin-bottom: 1rem;">Cuando pensamos en territorio, la imagen mental es clara: calles, casas, parques, el río Magdalena. Pero los ponentes nos hicieron ver algo que siempre estuvo ahí: <span style="color: #06b6d4; font-weight: bold;">el territorio ya no es solo físico</span>.</p>
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <p style="color: #ffffff;"><span style="color: #06b6d4; font-weight: bold;">Barrancabermeja</span>, por ejemplo, no es solo la ciudad donde amanece con olor a petróleo. También es el hashtag #Barranca en Twitter cuando hay protestas, es el grupo de WhatsApp del barrio, es el stream en Twitch del parcero que juega Free Fire. <span style="color: #06b6d4; font-weight: bold;">Todo eso ES territorio.</span></p>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <div style="font-size: 2rem;">💭</div>
+                <div>
+                    <p style="color: #a855f7; font-weight: bold; margin-bottom: 0.5rem;">Pregunta incómoda #2</p>
+                    <p style="font-style: italic; color: #d1d5db;">Si pudieras elegir entre limpiar tu ciudad física o limpiar tu ciudad digital de información tóxica, ¿cuál elegirías?</p>
+                </div>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(236, 72, 153, 0.2)); border: 1px solid #a855f7; margin-top: 3rem;">
+                <h3 style="font-size: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                    <span>📚</span>
+                    <span>La educación transformadora</span>
+                </h3>
+                <p style="margin-bottom: 1rem;">Daniel Libardo Torres Calderón fue directo en su presentación. <span style="color: #ec4899; font-weight: bold;">Demasiado directo.</span> Dijo que el sistema educativo actual nos está preparando para trabajos que ya no existen.</p>
+                
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <div style="display: flex; align-items: start; gap: 1rem; margin-bottom: 1rem;">
+                        <span style="color: #ef4444; font-size: 1.5rem;">❌</span>
+                        <p>Nos enseñan a memorizar fechas pero NO a detectar desinformación</p>
+                    </div>
+                    <div style="display: flex; align-items: start; gap: 1rem; margin-bottom: 1rem;">
+                        <span style="color: #ef4444; font-size: 1.5rem;">❌</span>
+                        <p>Pedimos ensayos manuscritos cuando el mundo trabaja en Google Docs</p>
+                    </div>
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <span style="color: #ef4444; font-size: 1.5rem;">❌</span>
+                        <p>Prohibimos celulares cuando son herramientas de aprendizaje poderosas</p>
+                    </div>
+                </div>
+
+                <p style="text-align: center; font-size: 1.3rem; color: #ec4899; font-weight: bold; font-style: italic; margin-top: 1.5rem;">¿Ven la ironía? La educación debería ser el puente, pero muchas veces es el muro.</p>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); border: 1px solid #10b981; margin-top: 3rem;">
+                <h3 style="font-size: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                    <span>🦸</span>
+                    <span>Ciudadanía digital: El superpoder</span>
+                </h3>
+                <p style="margin-bottom: 2rem;">Resulta que ser "ciudadano digital" no es solo tener Instagram. Es mucho más profundo, <span style="color: #10b981; font-weight: bold;">más revolucionario</span>.</p>
+                
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div style="background: rgba(30, 41, 59, 0.6); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">⚖️</div>
+                        <h4 style="font-weight: bold; margin-bottom: 0.5rem;">Derechos digitales</h4>
+                        <p style="color: #d1d5db; font-size: 0.9rem;">Privacidad, información confiable, no ser vigilados</p>
+                    </div>
+                    <div style="background: rgba(30, 41, 59, 0.6); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
+                        <h4 style="font-weight: bold; margin-bottom: 0.5rem;">Deberes digitales</h4>
+                        <p style="color: #d1d5db; font-size: 0.9rem;">No compartir fake news, verificar antes de repostear</p>
+                    </div>
+                    <div style="background: rgba(30, 41, 59, 0.6); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">✊</div>
+                        <h4 style="font-weight: bold; margin-bottom: 0.5rem;">Participación activa</h4>
+                        <p style="color: #d1d5db; font-size: 0.9rem;">Usar la tech para mejorar nuestra comunidad</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(239, 68, 68, 0.2)); border: 1px solid #f97316; margin-top: 3rem;">
+                <h3 style="font-size: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                    <span>📍</span>
+                    <span>El caso Barrancabermeja</span>
+                </h3>
+                
+                <div style="background: rgba(30, 41, 59, 0.8); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ef4444; margin: 1.5rem 0;">
+                    <p style="color: #fca5a5; font-weight: bold; margin-bottom: 1rem;">⚠️ ESCENARIO REAL:</p>
+                    <p style="margin-bottom: 1rem;">Circula en WhatsApp que el agua está contaminada. En 2 horas llegó a 10,000 personas. Pánico, compras masivas, supermercados sin agua.</p>
+                    <p style="color: #ef4444; font-weight: bold; font-size: 1.2rem;">Pero era mentira. Alguien lo inventó.</p>
+                </div>
+
+                <p style="margin-top: 1.5rem;"><span style="color: #f97316; font-weight: bold;">Compartir sin verificar es como gritar "¡FUEGO!" en un cine sin confirmar si hay llamas</span>. Las consecuencias son reales.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="conclusiones" style="background: rgba(15, 23, 42, 0.5);">
+        <div class="container">
+            <h2 class="section-title">Conclusiones 💡</h2>
+            <p style="text-align: center; font-size: 1.1rem; color: #d1d5db; margin-bottom: 3rem;">Lo que aprendimos y lo que nos quedó dando vueltas en la cabeza</p>
+
+            <div class="card" style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.3), rgba(236, 72, 153, 0.3)); margin-bottom: 2rem;">
+                <p style="margin-bottom: 1rem;">Después de sumergirnos en las ponencias, después de leer papers académicos hasta que los ojos nos ardieron, después de debatir hasta las 2 AM, llegamos a algunas conclusiones.</p>
+                <p style="text-align: center; color: #ec4899; font-weight: bold;">Pero ojo, no son verdades absolutas. Son puntos de partida para seguir cuestionando.</p>
+            </div>
+
+            <div class="conclusion-card conclusion-1">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">1️⃣ El territorio es uno solo</h3>
+                <p style="color: #d1d5db;">No hay "mundo real" y "mundo virtual". Hay UN mundo con dos capas que se afectan mutuamente. Lo que pasa en las redes impacta las calles.</p>
+            </div>
+
+            <div class="conclusion-card conclusion-2">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">2️⃣ La educación necesita un update urgente</h3>
+                <p style="color: #d1d5db;">No se trata de meter tablets en las aulas. Se trata de repensar CÓMO, QUÉ y PARA QUÉ enseñamos. Si no nos prepara para navegar el mundo digital con criterio, está fallando.</p>
+            </div>
+
+            <div class="conclusion-card conclusion-3">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">3️⃣ La ciudadanía digital se ejercita</h3>
+                <p style="color: #d1d5db;">No nacemos sabiendo ser buenos ciudadanos digitales. Es un músculo que hay que entrenar. Si no lo usas, se atrofia.</p>
+            </div>
+
+            <div class="conclusion-card conclusion-4">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">4️⃣ La tecnología no es neutral</h3>
+                <p style="color: #d1d5db;">Cada app, cada red social, cada algoritmo fue diseñado por personas con intenciones. Debemos entender esos mecanismos para no dejarnos manipular.</p>
+            </div>
+
+            <div class="conclusion-card conclusion-5">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">5️⃣ Tenemos más poder del que creemos</h3>
+                <p style="color: #d1d5db;">Cada like, cada share es un voto sobre qué tipo de internet queremos. El poder está en nuestras manos (literalmente, en nuestros celulares).</p>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(88, 28, 135, 0.7)); margin-top: 3rem; border: 2px solid #a855f7;">
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🌟</div>
+                    <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Reflexión final</h3>
+                    <p style="font-size: 1.5rem; color: #a855f7; font-weight: bold; font-style: italic; margin-bottom: 2rem; line-height: 1.6;">¿Estamos construyendo el territorio digital que queremos habitar, o estamos siendo construidos por él?</p>
+                    <p style="color: #d1d5db; margin-bottom: 1rem;">Podemos diseñar ciudades. Planeamos dónde van los parques, las escuelas, los hospitales. Pero el territorio digital parece que se construye solo, o peor, lo construyen empresas en Silicon Valley que nunca han pisado Barrancabermeja.</p>
+                    <p style="color: #d1d5db;">Los ponentes dejaron esa pregunta abierta. Y está bien así. Las mejores preguntas son las que nos obligan a seguir buscando, cuestionando, imaginando.</p>
+                </div>
+            </div>
+
+            <div class="card" style="background: rgba(236, 72, 153, 0.3); border: 3px solid #ec4899; margin-top: 3rem;">
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">💬</div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: #ffffff;">Una última pregunta antes de irnos</h3>
+                    <p style="font-size: 1.3rem; font-style: italic; color: #d1d5db; margin-bottom: 2rem; line-height: 1.7;">Si pudieras enviarle un mensaje a las futuras generaciones sobre cómo usar la tecnología, ¿qué les dirías?</p>
+                    <p style="color: #d1d5db; font-size: 0.95rem;">Porque la respuesta a esa pregunta es lo que deberíamos estar enseñando HOY en las escuelas.</p>
+                </div>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, #9333ea, #ec4899); margin-top: 2rem;">
+                <p style="font-size: 1.2rem; text-align: center; margin-bottom: 1rem;">Y con eso, los dejamos. No con respuestas cerradas, sino con la cabeza llena de preguntas.</p>
+                <p style="text-align: center; font-style: italic; opacity: 0.9;">Porque tal vez de eso se trata la educación de verdad: no de memorizar datos, sino de aprender a hacer las preguntas correctas.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="recursos">
+        <div class="container">
+            <h2 class="section-title">Bibliografía 📚</h2>
+            <p style="text-align: center; color: #d1d5db; margin-bottom: 3rem; font-size: 1.1rem;">Las fuentes que nos volaron la cabeza</p>
+
+            <div class="biblio-item">
+                <p style="color: #d1d5db;"><span style="color: #a855f7; font-weight: bold;">1.</span> Morduchowicz, R. (2020). <em>La ciudadanía digital como política pública en educación en América Latina</em>. UNESCO.</p>
+            </div>
+
+            <div class="biblio-item">
+                <p style="color: #d1d5db;"><span style="color: #a855f7; font-weight: bold;">2.</span> Ortega-Gabriel, Walter. (2015). Ciudadanía digital: Entre la novedad del fenómeno y las limitaciones del concepto. <em>Economía, sociedad y territorio</em>, 15(49), 835-844.</p>
+            </div>
+
+            <div class="biblio-item">
+                <p style="color: #d1d5db;"><span style="color: #a855f7; font-weight: bold;">3.</span> Ponencias del Foro de Ciencias Humanas: Territorio, Memoria y Futuro Digital (2025). Ponentes: Daniel Libardo Torres Calderón, Jesús Manuel Vergara Figueroa y Cristian Manuel Navarro Jiménez.</p>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(88, 28, 135, 0.5)); margin-top: 3rem; text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🏫</div>
+                <h3 style="font-size: 2rem; margin-bottom: 1rem;">Instituto Técnico Veintiséis de Marzo</h3>
+                <p style="color: #d1d5db; margin-bottom: 1.5rem;">Barrancabermeja, Colombia</p>
+                <div style="border-top: 1px solid rgba(147, 51, 234, 0.3); padding-top: 1.5rem; margin-top: 1.5rem;">
+                    <p style="color: #d1d5db; margin-bottom: 0.5rem;">Profesor: <span style="color: #ffffff; font-weight: bold;">José Miguel Alza Camacho</span></p>
+                    <p style="color: #d1d5db;">Octubre 2025</p>
+                </div>
+            </div>
+
+            <div class="card" style="background: rgba(147, 51, 234, 0.3); border: 2px solid #a855f7; margin-top: 2rem;">
+                <p style="text-align: center; color: #d1d5db; line-height: 1.8;">
+                    <span style="color: #a855f7; font-weight: bold; font-size: 1.1rem;">P.D.:</span> Si llegaste hasta acá leyendo, gracias. De verdad. Significa que te importa entender este mundo loco, híbrido, fascinante y aterrador en el que vivimos. 
+                    <span style="color: #ec4899; font-weight: bold;">Eso ya es el primer paso para ser un mejor ciudadano digital.</span>
+                </p>
+                <p style="text-align: center; color: #9ca3af; font-size: 0.9rem; margin-top: 1rem; font-style: italic;">💡 Pista: Haz clic 3 veces en el contador de café abajo a la izquierda 👀</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Hecho con ❤️, 304 tazas de café ☕, 4 partidas pausadas de Minecraft 🎮</p>
+        <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 2rem;">y muchas preguntas existenciales 🤔</p>
+        <p style="color: #a855f7; font-size: 0.9rem;">© 2025 Foro Ciencias Humanas - Instituto Técnico Veintiséis de Marzo</p>
+    </footer>
+
+    <script>
+        // Progress Bar
+        window.addEventListener('scroll', function() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Navbar effect
+        window.addEventListener('scroll', function() {
+            var navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Reading time
+        var timeSpent = 0;
+        var readingTimer = null;
+        
+        window.addEventListener('scroll', function() {
+            var readingTime = document.getElementById('readingTime');
+            if (window.scrollY > 500) {
+                readingTime.style.display = 'flex';
+                
+                if (!readingTimer) {
+                    readingTimer = setInterval(function() {
+                        timeSpent++;
+                        document.getElementById('timeSpent').textContent = timeSpent;
+                    }, 60000);
+                }
+            }
+        });
+
+        // Easter Egg - Coffee Counter
+        var clickCount = 0;
+        document.getElementById('easterCounter').addEventListener('click', function() {
+            clickCount++;
+            if (clickCount === 3) {
+                document.getElementById('easterModal').style.display = 'flex';
+            }
+        });
+
+        function closeModal() {
+            document.getElementById('easterModal').style.display = 'none';
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                var target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Coffee counter animation
+        function animateCounter() {
+            var counter = document.getElementById('coffeeCount');
+            var count = 304;
+            setInterval(function() {
+                count += Math.floor(Math.random() * 3);
+                counter.textContent = count;
+            }, 5000);
+        }
+        animateCounter();
+
+        // Konami Code
+        var konamiCode = [];
+        var konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', function(e) {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+            
+            if (konamiCode.join(',') === konamiPattern.join(',')) {
+                document.body.style.transform = 'rotate(360deg)';
+                document.body.style.transition = 'transform 2s';
+                setTimeout(function() {
+                    document.body.style.transform = '';
+                    alert('🎮 ¡Código Konami desbloqueado! Eres un verdadero gamer. Respeto. 🙌');
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
